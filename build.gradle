@@ -4,7 +4,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     // https://projects.neoforged.net/neoforged/neogradle
-    id 'net.neoforged.gradle.userdev' version '7.0.178'
+    id 'net.neoforged.gradle.userdev' version '7.0.184'
 }
 
 version = mod_version
@@ -19,7 +19,7 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-    maven { url "https://maven.shedaniel.me" }
+    mavenCentral()
     mavenLocal()
     exclusiveContent {
         forRepository {
@@ -70,9 +70,9 @@ dependencies {
     compileOnly("mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}")
     runtimeOnly("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
-    implementation "appeng:appliedenergistics2:${ae2_version}"
+    implementation "org.appliedenergistics:appliedenergistics2:${ae2_version}"
 
-    compileOnly("curse.maven:ae2wtlib-459929:5193621")
+    compileOnly("curse.maven:ae2wtlib-459929:6437277")
 }
 
 tasks.withType(ProcessResources).configureEach {

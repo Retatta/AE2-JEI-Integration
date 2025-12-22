@@ -229,7 +229,7 @@ public class CertusGrowthCategory extends ViewBasedCategory<CertusGrowthCategory
 
         @Override
         public void createRecipeExtras(IRecipeExtrasBuilder builder, IFocusGroup focuses) {
-            builder.addRecipeArrow(centerX - 12, 0);
+            builder.addRecipeArrow().setPosition(centerX - 12, 0);
 
             builder.addScrollBoxWidget(getWidth(), getHeight() - 20, 0, 20)
                 .setContents(List.of(

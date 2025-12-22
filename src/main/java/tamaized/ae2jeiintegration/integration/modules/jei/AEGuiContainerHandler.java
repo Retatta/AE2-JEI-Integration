@@ -26,6 +26,7 @@ class AEGuiContainerHandler implements IGuiContainerHandler<AEBaseScreen<?>> {
 		return screen.getExclusionZones();
 	}
 
+	@SuppressWarnings("removal")
 	@Override
 	public Optional<IClickableIngredient<?>> getClickableIngredientUnderMouse(AEBaseScreen<?> screen,
 																			  double mouseX, double mouseY) {

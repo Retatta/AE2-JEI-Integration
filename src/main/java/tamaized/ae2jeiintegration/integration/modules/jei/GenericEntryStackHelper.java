@@ -10,10 +10,12 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.runtime.IClickableIngredient;
 import mezz.jei.api.runtime.IIngredientManager;
 import org.jetbrains.annotations.Nullable;
+import tamaized.ae2jeiintegration.api.integrations.jei.IngredientConverter;
 import tamaized.ae2jeiintegration.api.integrations.jei.IngredientConverters;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public final class GenericEntryStackHelper {
@@ -36,17 +38,25 @@ public final class GenericEntryStackHelper {
 
     @Nullable
     public static IClickableIngredient<?> stackToClickableIngredient(IIngredientManager manager, StackWithBounds stack) {
-        for (var converter : IngredientConverters.getConverters()) {
-            var ingredient = converter.getIngredientFromStack(stack.stack());
-            if (ingredient != null) {
-                var clickableIngredient = manager.createClickableIngredient(ingredient, stack.bounds(), true);
-                if (clickableIngredient.isPresent()) {
-                    return clickableIngredient.get();
-                }
-            }
+		return IngredientConverters.getConverters()
+            .stream()
+            .map(converter -> stackToClickableIngredient(converter, manager, stack))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .findFirst()
+            .orElse(null);
+	}
+
+    private static <T> Optional<IClickableIngredient<T>> stackToClickableIngredient(IngredientConverter<T> converter, IIngredientManager manager, StackWithBounds stack) {
+        var ingredient = converter.getIngredientFromStack(stack.stack());
+        if (ingredient != null) {
+            IIngredientType<T> ingredientType = converter.getIngredientType();
+            return manager.getClickableIngredientFactory()
+                .createBuilder(ingredientType, ingredient)
+                .buildWithArea(stack.bounds());
         }
 
-        return null;
+        return Optional.empty();
     }
 
     public static List<List<GenericStack>> ofInputs(IRecipeSlotsView recipeLayout) {
